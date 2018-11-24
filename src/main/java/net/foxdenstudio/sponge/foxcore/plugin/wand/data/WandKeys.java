@@ -29,35 +29,32 @@ import com.google.common.reflect.TypeToken;
 import net.foxdenstudio.sponge.foxcore.plugin.wand.IWand;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.key.Key;
-import org.spongepowered.api.data.key.KeyFactory;
 import org.spongepowered.api.data.value.mutable.Value;
 
 public class WandKeys {
 
-    public static final Key<Value<String>> TYPE = KeyFactory.makeSingleKey(
-            TypeToken.of(String.class),
-            new TypeToken<Value<String>>() {
-            },
-            DataQuery.of("type"),
-            "foxcore:wandtype",
-            "Wand Type");
+    public static final Key<Value<String>> TYPE = Key.builder()
+            .type(new TypeToken<Value<String>>() {
+            })
+            .query(DataQuery.of("type"))
+            .id("wandtype")
+            .name("Wand Type")
+            .build();
 
-    public static final Key<Value<Integer>> ID = KeyFactory.makeSingleKey(
-            TypeToken.of(Integer.class),
-            new TypeToken<Value<Integer>>() {
-            },
-            DataQuery.of("id"),
-            "foxcore:wandID",
-            "Wand ID"
-    );
+    public static final Key<Value<Integer>> ID = Key.builder()
+            .type(new TypeToken<Value<Integer>>() {
+            })
+            .query(DataQuery.of("id"))
+            .id("wandID")
+            .name("Wand ID")
+            .build();
 
-    public static final Key<Value<IWand>> WAND = KeyFactory.makeSingleKey(
-            TypeToken.of(IWand.class),
-            new TypeToken<Value<IWand>>() {
-            },
-            DataQuery.of("wand"),
-            "foxcore:wanddata",
-            "Wand Data"
-    );
+    public static final Key<Value<IWand>> WAND = Key.builder()
+            .type(new TypeToken<Value<IWand>>() {
+            })
+            .query(DataQuery.of("wand"))
+            .id("wanddata")
+            .name("Wand Data")
+            .build();
 
 }

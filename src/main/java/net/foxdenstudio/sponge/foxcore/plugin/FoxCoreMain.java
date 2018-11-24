@@ -41,18 +41,9 @@ import net.foxdenstudio.sponge.foxcore.plugin.wand.FCWandRegistry;
 import net.foxdenstudio.sponge.foxcore.plugin.wand.data.ImmutableWandData;
 import net.foxdenstudio.sponge.foxcore.plugin.wand.data.WandData;
 import net.foxdenstudio.sponge.foxcore.plugin.wand.data.WandDataBuilder;
+import net.foxdenstudio.sponge.foxcore.plugin.wand.data.WandKeys;
 import net.foxdenstudio.sponge.foxcore.plugin.wand.types.CounterWand;
 import net.foxdenstudio.sponge.foxcore.plugin.wand.types.PositionWand;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.RollingRandomAccessFileAppender;
-import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
-import org.apache.logging.log4j.core.appender.rolling.OnStartupTriggeringPolicy;
-import org.apache.logging.log4j.core.config.AppenderRef;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Game;
@@ -128,6 +119,12 @@ public final class FoxCoreMain {
     public void preInit(GamePreInitializationEvent event) {
         //logger.info("Injecting fox logger");
         //setupLogging();
+
+        // Loads WandKeys and builds its Keys when the PluginContainer is on the CauseStack,
+        // otherwise people are getting kicked when joining the server if they have a wand in their inventories
+        // since Keys are built when no PluginContainer is on the CauseStack in this case.
+        // For some reason it started happening around the same time they changed the versioning scheme.
+        WandKeys.ID.getId();
 
         logger.info("Beginning FoxCore initialization");
         logger.info("Version: " + container.getVersion().orElse("Unknown"));
@@ -210,7 +207,7 @@ public final class FoxCoreMain {
     @Listener
     public void registerData(GameInitializationEvent event) {
         logger.info("Registering custom data manipulators");
-        DataRegistration.<WandData, ImmutableWandData>builder()
+        DataRegistration.builder()
                 .dataClass(WandData.class)
                 .immutableClass(ImmutableWandData.class)
                 .builder(new WandDataBuilder())
